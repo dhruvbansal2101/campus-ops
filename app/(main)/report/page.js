@@ -93,7 +93,7 @@ export default function ReportPage() {
         </div>
 
         {/* RECEIPTS */}
-        <h2 className="text-xl font-bold mb-3">Show us the receipts</h2>
+        <h2 className="text-xl font-bold mb-3">Got Proof?(Upload it here)</h2>
 
         <div className="flex gap-4 mb-6">
 

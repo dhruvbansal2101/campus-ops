@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
         {/* GREETING */}
         <h1 className="text-[32px] md:text-[40px] font-extrabold text-gray-900">
-          Hey, Alex!
+          Hey, Ridhi!
         </h1>
 
         <p className="text-sm text-gray-500 mb-6">

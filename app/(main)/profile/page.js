@@ -56,10 +56,10 @@ export default function ProfilePage() {
 
           <div>
             <h2 className="text-xl font-bold text-gray-900">
-              Alex Johnson
+              Ridhi Garg
             </h2>
             <p className="text-sm text-gray-500">
-              alex@university.edu
+              ridhi@university.edu
             </p>
 
             <span className="inline-block mt-2 text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-medium">
