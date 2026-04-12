@@ -1,29 +1,94 @@
+"use client";
+
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import { useRouter } from "next/navigation";
+
 export default function LoginPage() {
+  const router = useRouter();
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-100 to-orange-300">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-[#9ec5d3] via-[#b7d7e2] to-[#dbeff5] px-4">
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full mb-4 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-400"
-        />
+      {/* CENTER CONTENT */}
+      <div className="flex items-center justify-center flex-1">
+        <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full mb-6 p-3 border rounded-lg outline-none focus:ring-2 focus:ring-orange-400"
-        />
+          {/* LEFT SIDE */}
+          <div className="flex flex-col justify-center">
+            
+            <h1 className="text-orange-600 font-extrabold text-3xl tracking-tight">
+              CampusOps
+            </h1>
 
-        <button className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition">
-          Login
-        </button>
+            <h2 className="text-[72px] md:text-[90px] font-extrabold text-gray-900 leading-[0.95] mt-6">
+              Get in <br /> here.
+            </h2>
 
-        <p className="text-sm text-center mt-4 text-gray-500">
-          Don’t have an account? Sign up
-        </p>
+            <p className="text-lg text-gray-600 mt-5 max-w-md">
+              Welcome back, we missed the energy.
+            </p>
+
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="bg-[#efe7db] rounded-3xl p-8 shadow-xl max-w-md w-full ml-auto">
+            
+            <label className="text-xs text-gray-600 font-medium">
+              Campus Email
+            </label>
+            <Input
+              type="email"
+              placeholder="you@university.edu"
+              className="mb-4 mt-1 bg-white rounded-full"
+            />
+
+            <div className="flex justify-between text-xs text-gray-600 mb-1">
+              <span>Password</span>
+              <span className="text-orange-600 cursor-pointer">Forgot?</span>
+            </div>
+
+            <Input
+              type="password"
+              placeholder="••••••••"
+              className="mb-5 bg-white rounded-full"
+            />
+
+            <Button
+              className="rounded-full py-3 font-semibold"
+              onClick={() => router.push("/dashboard")}
+            >
+              Logged in
+            </Button>
+
+            <div className="text-center text-xs text-gray-500 mt-4 mb-2">
+              OR MAYBE
+            </div>
+
+            <div className="bg-gray-200 rounded-full py-3 text-center text-sm font-medium cursor-pointer">
+              Sign up
+            </div>
+
+          </div>
+
+        </div>
       </div>
+
+      {/* FOOTER */}
+      <div className="text-center text-xs text-gray-600 mb-4">
+        By getting in here, you’re agreeing to our{" "}
+        
+        <span className="font-semibold text-sm underline cursor-pointer text-gray-800">
+          House Rules
+        </span>{" "}
+        
+        and{" "}
+        
+        <span className="font-semibold text-sm underline cursor-pointer text-gray-800">
+          Privacy Logic
+        </span>.
+      </div>
+
     </div>
   );
 }
