@@ -1,37 +1,32 @@
 "use client";
 
-import { User, MessageCircle } from "lucide-react";
+import { User, MessageCircle, Bell } from "lucide-react";
 
 export default function TrackingPage() {
   return (
     <div className="bg-[#f5f0e6] min-h-screen flex flex-col">
 
       {/* HEADER */}
-      <div className="bg-[#ece5da] px-4 sm:px-6 py-4 flex items-center justify-between relative shadow-sm">
+      {/* HEADER */}
+<div className="bg-[#ece5da] px-6 py-4 flex items-center justify-between shadow-sm">
 
   {/* LEFT */}
-  <div className="w-28 flex items-center gap-2">
+  <div className="flex items-center gap-2">
     <div className="bg-white rounded-full p-2 shadow-sm">
       <User size={16} />
     </div>
 
-    <span className="text-orange-600 font-bold text-base sm:text-lg truncate">
+    <span className="text-orange-600 font-bold text-lg">
       CampusOps
     </span>
   </div>
 
-  {/* CENTER TITLE */}
-  <h1 className="absolute left-1/2 -translate-x-1/2 text-base sm:text-lg font-semibold whitespace-nowrap">
-    Track Your Issue
-  </h1>
-
   {/* RIGHT */}
-  <div className="w-28 flex justify-end">
-    <div className="flex gap-1 bg-white px-2 py-1 rounded-full shadow-sm">
-      <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
-      <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
-      <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
-    </div>
+  <div className="bg-white rounded-full p-2 shadow-sm cursor-pointer transition-all duration-300 hover:bg-orange-50 hover:scale-105">
+    <Bell
+      size={16}
+      className="text-orange-500"
+    />
   </div>
 
 </div>
