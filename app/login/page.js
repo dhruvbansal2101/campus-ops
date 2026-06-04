@@ -3,9 +3,19 @@
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
+import { loginWithGoogle } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+
+  const handleGoogleLogin = async () => {
+  try {
+    await loginWithGoogle();
+    router.push("/dashboard");
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-[#9ec5d3] via-[#b7d7e2] to-[#dbeff5] px-4">
@@ -58,16 +68,25 @@ export default function LoginPage() {
               className="rounded-full py-3 font-semibold"
               onClick={() => router.push("/dashboard")}
             >
-              Logged in
+              Log in
             </Button>
 
             <div className="text-center text-xs text-gray-500 mt-4 mb-2">
               OR MAYBE
             </div>
 
-            <div className="bg-gray-200 rounded-full py-3 text-center text-sm font-medium cursor-pointer">
-              Sign up
-            </div>
+            <Button className="rounded-full py-3 font-semibold"
+            onClick={handleGoogleLogin}>
+              Continue with Google
+              </Button>
+
+<div className="text-center text-xs text-gray-500 mt-4 mb-2">
+  OR MAYBE
+</div>
+
+<Button className="rounded-full py-3 font-semibold">
+  Sign up
+</Button>
 
           </div>
 

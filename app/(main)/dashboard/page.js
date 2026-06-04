@@ -2,14 +2,17 @@
 
 import { Wifi, Droplet, Utensils, User, Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const router = useRouter();
 
   return (
+    <ProtectedRoute>
     <div className="flex flex-col min-h-screen bg-[#f5f0e6]">
 
-      {/* HEADER */}
 {/* HEADER */}
 <div className="bg-[#ece5da] px-6 py-4 flex items-center justify-between shadow-sm">
 
@@ -39,8 +42,8 @@ export default function DashboardPage() {
 
         {/* GREETING */}
         <h1 className="text-[32px] md:text-[40px] font-extrabold text-gray-900">
-          Hey, Ridhi!
-        </h1>
+  Hey, {user?.displayName?.split(" ")[0] || "Student"}!
+</h1>
 
         <p className="text-sm text-gray-500 mb-6">
           Something bugging you on campus?
@@ -148,5 +151,6 @@ export default function DashboardPage() {
       </div>
 
     </div>
+    </ProtectedRoute>
   );
 }

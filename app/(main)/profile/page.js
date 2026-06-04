@@ -2,9 +2,24 @@
 
 import { useState } from "react";
 import { User, Settings, LogOut, Bell, Shield} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { logout } from "@/lib/auth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ProfilePage() {
+  const { user } = useAuth();
   const [active, setActive] = useState(null);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+  try {
+    await logout();
+    router.push("/");
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const handleClick = (name) => {
     setActive(name);
@@ -21,9 +36,9 @@ export default function ProfilePage() {
     }`;
 
   return (
+    <ProtectedRoute>
     <div className="bg-[#f5f0e6] min-h-screen flex flex-col">
 
-      {/* HEADER */}
       {/* HEADER */}
 <div className="bg-[#ece5da] px-6 py-4 flex items-center justify-between shadow-sm">
 
@@ -54,21 +69,22 @@ export default function ProfilePage() {
         {/* PROFILE CARD */}
         <div className="bg-white border border-orange-100 rounded-3xl p-6 shadow-md flex items-center gap-5 hover:shadow-xl transition">
           <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl font-bold">
-            A
-          </div>
+  {user?.displayName?.charAt(0) || "U"}
+</div>
 
           <div>
-            <h2 className="text-xl font-bold text-gray-900">
-              Ridhi Garg
-            </h2>
-            <p className="text-sm text-gray-500">
-              ridhi@university.edu
-            </p>
+  <h2 className="text-xl font-bold text-gray-900">
+    {user?.displayName || "Guest User"}
+  </h2>
 
-            <span className="inline-block mt-2 text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-medium">
-              Student
-            </span>
-          </div>
+  <p className="text-sm text-gray-500">
+    {user?.email || "No email available"}
+  </p>
+
+  <span className="inline-block mt-2 text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-medium">
+    Student
+  </span>
+</div>
         </div>
 
         {/* STATS */}
@@ -131,23 +147,30 @@ export default function ProfilePage() {
         </div>
 
         {/* LOGOUT */}
-        <div>
-          <button
-            onClick={() => handleClick("logout")}
-            className={`w-full bg-orange-500 text-white py-3 rounded-full font-semibold shadow-md
-            transition duration-200
-            ${
-              active === "logout"
-                ? "scale-95 bg-orange-600"
-                : "hover:bg-orange-600 hover:scale-[1.02]"
-            } flex items-center justify-center gap-2`}
-          >
-            <LogOut size={16} />
-            Log out
-          </button>
-        </div>
+       <div>
+  <button
+    onClick={async () => {
+      handleClick("logout");
+
+      setTimeout(async () => {
+        await handleLogout();
+      }, 200);
+    }}
+    className={`w-full bg-orange-500 text-white py-3 rounded-full font-semibold shadow-md
+    transition duration-200
+    ${
+      active === "logout"
+        ? "scale-95 bg-orange-600"
+        : "hover:bg-orange-600 hover:scale-[1.02]"
+    } flex items-center justify-center gap-2`}
+  >
+    <LogOut size={16} />
+    Log out
+  </button>
+</div>
 
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

@@ -1,9 +1,11 @@
 "use client";
 
 import { User, MessageCircle, Bell } from "lucide-react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function TrackingPage() {
   return (
+    <ProtectedRoute>
     <div className="bg-[#f5f0e6] min-h-screen flex flex-col">
 
       {/* HEADER */}
@@ -181,5 +183,6 @@ export default function TrackingPage() {
       `}</style>
 
     </div>
+    </ProtectedRoute>
   );
 }

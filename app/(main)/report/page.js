@@ -3,6 +3,7 @@
 import { UploadCloud, Wifi, Utensils, Droplet, Building2, User, Bell } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { useState, useEffect } from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ReportPage() {
   const [selected, setSelected] = useState(null);
@@ -22,6 +23,7 @@ export default function ReportPage() {
   ];
 
   return (
+    <ProtectedRoute>
     <div className="bg-[#f5f0e6] min-h-screen flex flex-col">
 
       {/* HEADER */}
@@ -125,5 +127,6 @@ export default function ReportPage() {
 
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
