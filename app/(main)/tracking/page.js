@@ -7,26 +7,34 @@ export default function TrackingPage() {
     <div className="bg-[#f5f0e6] min-h-screen flex flex-col">
 
       {/* HEADER */}
-      <div className="bg-[#ece5da] px-6 py-4 flex items-center justify-between relative shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="bg-white rounded-full p-2 shadow-sm">
-            <User size={16} />
-          </div>
-          <span className="text-orange-600 font-bold text-lg">
-            CampusOps
-          </span>
-        </div>
+      <div className="bg-[#ece5da] px-4 sm:px-6 py-4 flex items-center justify-between relative shadow-sm">
 
-        <h1 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold">
-          Tracking Progress
-        </h1>
+  {/* LEFT */}
+  <div className="w-28 flex items-center gap-2">
+    <div className="bg-white rounded-full p-2 shadow-sm">
+      <User size={16} />
+    </div>
 
-        <div className="flex gap-1 bg-white px-2 py-1 rounded-full shadow-sm">
-          <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
-          <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
-          <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
-        </div>
-      </div>
+    <span className="text-orange-600 font-bold text-base sm:text-lg truncate">
+      CampusOps
+    </span>
+  </div>
+
+  {/* CENTER TITLE */}
+  <h1 className="absolute left-1/2 -translate-x-1/2 text-base sm:text-lg font-semibold whitespace-nowrap">
+    Track Your Issue
+  </h1>
+
+  {/* RIGHT */}
+  <div className="w-28 flex justify-end">
+    <div className="flex gap-1 bg-white px-2 py-1 rounded-full shadow-sm">
+      <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
+      <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
+      <span className="w-1.5 h-1.5 bg-gray-700 rounded-full"></span>
+    </div>
+  </div>
+
+</div>
 
       {/* CONTENT */}
       <div className="p-6 pb-32">
