@@ -1,19 +1,55 @@
 "use client";
 
+import {
+  loginWithGoogle,
+  loginWithEmail,
+  signupWithEmail,
+  resetPassword,
+} from "@/lib/auth";
+import { createUserDocument } from "@/lib/users";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
-import { loginWithGoogle } from "@/lib/auth";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
 
+  const [isSignup, setIsSignup] = useState(false);
+
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
   const handleGoogleLogin = async () => {
   try {
-    await loginWithGoogle();
+    const user = await loginWithGoogle();
+
+await createUserDocument(user);
     router.push("/dashboard");
   } catch (error) {
     console.error(error);
+  }
+};
+
+  const handleEmailAuth = async () => {
+  try {
+    if (isSignup) {
+  const user = await signupWithEmail(
+    name,
+    email,
+    password
+  );
+
+  await createUserDocument(user);
+
+    } else {
+      await loginWithEmail(email, password);
+    }
+
+    router.push("/dashboard");
+  } catch (error) {
+    alert(error.message);
   }
 };
 
@@ -43,33 +79,67 @@ export default function LoginPage() {
 
           {/* RIGHT SIDE */}
           <div className="bg-[#efe7db] rounded-3xl p-8 shadow-xl max-w-md w-full ml-auto">
-            
-            <label className="text-xs text-gray-600 font-medium">
-              Campus Email
-            </label>
-            <Input
-              type="email"
-              placeholder="you@university.edu"
-              className="mb-4 mt-1 bg-white rounded-full"
-            />
+
+  {isSignup && (
+    <>
+      <label className="text-xs text-gray-600 font-medium">
+        Full Name
+      </label>
+
+      <Input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Your name"
+        className="mb-4 mt-1 bg-white rounded-full"
+      />
+    </>
+  )}
+
+  <label className="text-xs text-gray-600 font-medium">
+    Campus Email
+  </label>
+
+  <Input
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    placeholder="you@university.edu"
+    className="mb-4 mt-1 bg-white rounded-full"
+  />
 
             <div className="flex justify-between text-xs text-gray-600 mb-1">
               <span>Password</span>
-              <span className="text-orange-600 cursor-pointer">Forgot?</span>
+              <span
+  className="text-orange-600 cursor-pointer"
+  onClick={async () => {
+    if (!email) {
+      alert("Enter your email first");
+      return;
+    }
+
+    await resetPassword(email);
+    alert("Password reset email sent");
+  }}
+>
+  Forgot?
+</span>
             </div>
 
             <Input
-              type="password"
-              placeholder="••••••••"
-              className="mb-5 bg-white rounded-full"
-            />
+  type="password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  placeholder="••••••••"
+  className="mb-5 bg-white rounded-full"
+/>
 
             <Button
-              className="rounded-full py-3 font-semibold"
-              onClick={() => router.push("/dashboard")}
-            >
-              Log in
-            </Button>
+  className="rounded-full py-3 font-semibold"
+  onClick={handleEmailAuth}
+>
+  {isSignup ? "Create Account" : "Log In"}
+</Button>
 
             <div className="text-center text-xs text-gray-500 mt-4 mb-2">
               OR MAYBE
@@ -84,8 +154,13 @@ export default function LoginPage() {
   OR MAYBE
 </div>
 
-<Button className="rounded-full py-3 font-semibold">
-  Sign up
+<Button
+  className="rounded-full py-3 font-semibold"
+  onClick={() => setIsSignup(!isSignup)}
+>
+  {isSignup
+    ? "Already have an account?"
+    : "Sign Up"}
 </Button>
 
           </div>

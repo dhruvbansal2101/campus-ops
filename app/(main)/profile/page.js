@@ -7,9 +7,11 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { logout } from "@/lib/auth";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { getUserDocument } from "@/lib/users";
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const [userData, setUserData] = useState(null);
   const [active, setActive] = useState(null);
   const router = useRouter();
   const [stats, setStats] = useState({
@@ -40,6 +42,17 @@ useEffect(() => {
   };
 
   loadStats();
+}, [user]);
+
+useEffect(() => {
+  const loadUser = async () => {
+    if (!user) return;
+
+    const data = await getUserDocument(user.uid);
+    setUserData(data);
+  };
+
+  loadUser();
 }, [user]);
 
   const handleClick = (name) => {
@@ -103,8 +116,11 @@ useEffect(() => {
   </p>
 
   <span className="inline-block mt-2 text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-medium">
-    Student
-  </span>
+  {userData?.role
+    ? userData.role.charAt(0).toUpperCase() +
+      userData.role.slice(1)
+    : "Student"}
+</span>
 </div>
         </div>
 
