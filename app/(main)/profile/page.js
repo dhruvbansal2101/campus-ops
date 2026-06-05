@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getComplaintStats } from "@/lib/complaints";
 import { User, Settings, LogOut, Bell, Shield} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -11,6 +12,11 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const [active, setActive] = useState(null);
   const router = useRouter();
+  const [stats, setStats] = useState({
+  total: 0,
+  resolved: 0,
+  pending: 0,
+});
 
   const handleLogout = async () => {
   try {
@@ -20,6 +26,21 @@ export default function ProfilePage() {
     console.error(error);
   }
 };
+
+useEffect(() => {
+  const loadStats = async () => {
+    if (!user) return;
+
+    try {
+      const data = await getComplaintStats(user.uid);
+      setStats(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadStats();
+}, [user]);
 
   const handleClick = (name) => {
     setActive(name);
@@ -90,17 +111,23 @@ export default function ProfilePage() {
         {/* STATS */}
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-white border border-orange-100 rounded-2xl p-4 text-center shadow-sm hover:shadow-lg transition">
-            <p className="text-xl font-bold">12</p>
+            <p className="text-xl font-bold">
+  {stats.total}
+</p>
             <p className="text-xs text-gray-500">Reports</p>
           </div>
 
           <div className="bg-white border border-orange-100 rounded-2xl p-4 text-center shadow-sm hover:shadow-lg transition">
-            <p className="text-xl font-bold text-green-600">8</p>
+            <p className="text-xl font-bold text-green-600">
+  {stats.resolved}
+</p>
             <p className="text-xs text-gray-500">Resolved</p>
           </div>
 
           <div className="bg-white border border-orange-100 rounded-2xl p-4 text-center shadow-sm hover:shadow-lg transition">
-            <p className="text-xl font-bold text-orange-500">4</p>
+            <p className="text-xl font-bold text-orange-500">
+  {stats.pending}
+</p>
             <p className="text-xs text-gray-500">Pending</p>
           </div>
         </div>

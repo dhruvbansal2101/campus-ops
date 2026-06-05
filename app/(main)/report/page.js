@@ -1,12 +1,19 @@
 "use client";
-
+import { useAuth } from "@/context/AuthContext";
+import { createComplaint } from "@/lib/complaints";
+import { useRouter } from "next/navigation";
 import { UploadCloud, Wifi, Utensils, Droplet, Building2, User, Bell } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { useState, useEffect } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ReportPage() {
-  const [selected, setSelected] = useState(null);
+const [selected, setSelected] = useState(null);
+const [description, setDescription] = useState("");
+const [loading, setLoading] = useState(false);
+
+const { user } = useAuth();
+const router = useRouter();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -22,11 +29,45 @@ export default function ReportPage() {
     { id: "hygiene", name: "Hygiene", desc: "Restrooms that require hazard suits.", icon: Droplet },
   ];
 
+  const handleSubmit = async () => {
+  if (!selected) {
+    alert("Please select a category");
+    return;
+  }
+
+  if (!description.trim()) {
+    alert("Please describe the issue");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    await createComplaint({
+      title:
+        categories.find((c) => c.id === selected)?.name ||
+        "Complaint",
+      category: selected,
+      description,
+      userId: user.uid,
+      userName: user.displayName,
+    });
+
+    alert("Complaint submitted successfully!");
+
+    router.push("/tracking");
+  } catch (error) {
+    console.error(error);
+    alert("Failed to submit complaint");
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <ProtectedRoute>
     <div className="bg-[#f5f0e6] min-h-screen flex flex-col">
 
-      {/* HEADER */}
       {/* HEADER */}
 <div className="bg-[#ece5da] px-6 py-4 flex items-center justify-between shadow-sm">
 
@@ -92,6 +133,8 @@ export default function ReportPage() {
 
         <div className="bg-white border border-orange-100 p-5 rounded-2xl mb-6 shadow-sm focus-within:ring-2 focus-within:ring-orange-200 transition">
           <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Tell us everything. Don’t hold back, we’re judgement-free (mostly)."
             className="w-full bg-transparent outline-none text-sm h-24"
           />
@@ -121,8 +164,11 @@ export default function ReportPage() {
         </div>
 
         {/* BUTTON */}
-        <Button className="rounded-full py-3 transition hover:scale-[1.02] active:scale-95">
-          Send it 🚀
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="rounded-full py-3 transition hover:scale-[1.02] active:scale-95">
+          {loading ? "Submitting..." : "Send it 🚀"}
         </Button>
 
       </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { getUserComplaints } from "@/lib/complaints";
 import { Wifi, Droplet, Utensils, User, Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -8,6 +10,22 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 export default function DashboardPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const [complaints, setComplaints] = useState([]);
+
+  useEffect(() => {
+  const loadComplaints = async () => {
+    if (!user) return;
+
+    try {
+      const data = await getUserComplaints(user.uid);
+      setComplaints(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadComplaints();
+}, [user]);
 
   return (
     <ProtectedRoute>
@@ -87,43 +105,42 @@ export default function DashboardPage() {
         {/* IN PROGRESS */}
         <h2 className="text-lg font-semibold mb-3">In Progress</h2>
 
-        {/* CARD 1 */}
-        <div className="bg-white border border-orange-100 p-4 rounded-2xl mb-4 relative flex gap-3 cursor-pointer
-        transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+        {complaints.length === 0 ? (
+  <div className="bg-white border border-orange-100 p-4 rounded-2xl">
+    <p className="text-gray-500 text-sm">
+      No complaints yet. Time to enjoy campus 😎
+    </p>
+  </div>
+) : (
+  complaints.slice(0, 3).map((complaint) => (
+    <div
+      key={complaint.id}
+      className="bg-white border border-orange-100 p-4 rounded-2xl mb-4 relative flex gap-3 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+    >
+      <Wifi size={16} />
 
-          <Wifi size={16} />
+      <div className="flex-1">
+        <p className="font-semibold">
+          {complaint.title}
+        </p>
 
-          <div className="flex-1">
-            <p className="font-semibold">Hostel B Wifi Deadzone</p>
-            <p className="text-xs text-gray-500">
-              Reported in Common Room.
-            </p>
-          </div>
+        <p className="text-xs text-gray-500">
+          {complaint.description}
+        </p>
+      </div>
 
-          <span className="absolute top-3 right-3 text-[10px] bg-orange-200 text-orange-600 px-2 py-1 rounded-full font-semibold">
-            WE'RE LOOKING INTO IT
-          </span>
-
-        </div>
-
-        {/* CARD 2 */}
-        <div className="bg-white border border-orange-100 p-4 rounded-2xl relative flex gap-3 cursor-pointer
-        transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-
-          <Droplet size={16} />
-
-          <div className="flex-1">
-            <p className="font-semibold">Library Lights</p>
-            <p className="text-xs text-gray-500">
-              Fixed by maintenance.
-            </p>
-          </div>
-
-          <span className="absolute top-3 right-3 text-[10px] bg-green-200 text-green-700 px-2 py-1 rounded-full font-bold">
-            SORTED
-          </span>
-
-        </div>
+      <span
+        className={`absolute top-3 right-3 text-[10px] px-2 py-1 rounded-full font-semibold ${
+          complaint.status === "sorted"
+            ? "bg-green-200 text-green-700"
+            : "bg-orange-200 text-orange-600"
+        }`}
+      >
+        {complaint.status.toUpperCase()}
+      </span>
+    </div>
+  ))
+)}
 
       </div> {/* ✅ MAIN CONTENT CLOSED */}
 
@@ -143,7 +160,7 @@ export default function DashboardPage() {
               The campus belongs to you.
             </h3>
             <p className="text-sm mt-2">
-              Let’s keep it running smooth.
+              Let's keep it running smooth.
             </p>
           </div>
 
