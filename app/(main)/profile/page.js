@@ -177,9 +177,12 @@ useEffect(() => {
 
           {/* PRIVACY */}
           <div
-            onClick={() => handleClick("privacy")}
-            className={itemStyle("privacy")}
-          >
+  onClick={() => {
+    handleClick("privacy");
+    router.push("/privacy");
+  }}
+  className={itemStyle("privacy")}
+>
             <div className="flex items-center gap-3">
               <Shield size={18} className="transition group-hover:text-orange-600 group-hover:scale-110" />
               <span className="text-sm font-medium">Privacy & Security</span>
