@@ -6,7 +6,10 @@ import {
   signupWithEmail,
   resetPassword,
 } from "@/lib/auth";
-import { createUserDocument } from "@/lib/users";
+import {
+  createUserDocument,
+  getUserDocument,
+} from "@/lib/users";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
@@ -26,28 +29,48 @@ const [password, setPassword] = useState("");
     const user = await loginWithGoogle();
 
 await createUserDocument(user);
-    router.push("/dashboard");
+    const userDoc = await getUserDocument(
+  user.uid
+);
+
+if (userDoc?.role === "admin") {
+  router.push("/admin");
+} else {
+  router.push("/dashboard");
+}
   } catch (error) {
     console.error(error);
   }
 };
 
-  const handleEmailAuth = async () => {
+const handleEmailAuth = async () => {
   try {
+    let user;
+
     if (isSignup) {
-  const user = await signupWithEmail(
-    name,
-    email,
-    password
-  );
+      user = await signupWithEmail(
+        name,
+        email,
+        password
+      );
 
-  await createUserDocument(user);
-
+      await createUserDocument(user);
     } else {
-      await loginWithEmail(email, password);
+      user = await loginWithEmail(
+        email,
+        password
+      );
     }
 
-    router.push("/dashboard");
+    const userDoc = await getUserDocument(
+      user.uid
+    );
+
+    if (userDoc?.role === "admin") {
+      router.push("/admin");
+    } else {
+      router.push("/dashboard");
+    }
   } catch (error) {
     alert(error.message);
   }

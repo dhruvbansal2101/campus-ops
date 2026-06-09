@@ -189,6 +189,26 @@ useEffect(() => {
 
         </div>
 
+        {userData?.role === "admin" && (
+  <div
+    onClick={() => router.push("/admin")}
+    className={itemStyle("admin")}
+  >
+    <div className="flex items-center gap-3">
+      <Shield
+        size={18}
+        className="transition group-hover:text-orange-600 group-hover:scale-110"
+      />
+
+      <span className="text-sm font-medium">
+        Admin Panel
+      </span>
+    </div>
+
+    <span className="text-gray-400">{">"}</span>
+  </div>
+)}
+
         {/* LOGOUT */}
        <div>
   <button
